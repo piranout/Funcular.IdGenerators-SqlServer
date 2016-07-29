@@ -45,3 +45,11 @@ $RECYCLE.BIN/
 Network Trash Folder
 Temporary Items
 .apdisk
+/Base36SqlClrDb/bin
+/Base36SqlClrDb/obj
+/Base36SqlClrDb/Base36SqlClrDb.sqlproj.user
+/Base36SqlClrDb/dbo/Functions/NewDelimitedBase36Id.sql
+/Funcular.IdGenerators.SqlServer/bin
+/Funcular.IdGenerators.SqlServer/obj
+/Funcular.IdGenerators.SqlServer.Tests/bin/Debug
+/Funcular.IdGenerators.SqlServer.Tests/obj/Debug
