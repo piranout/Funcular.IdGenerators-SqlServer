@@ -1,6 +1,7 @@
 using System;
 using System.Collections.Generic;
 using System.Data.SqlTypes;
+using System.Linq;
 using Funcular.IdGenerators.Base36;
 using Microsoft.SqlServer.Server;
 
@@ -16,70 +17,53 @@ using Microsoft.SqlServer.Server;
 
         /// <summary>
         /// Returns a new Base 36 Id with 11 timestamp characters, 4 server hash characters,
-        /// 5 random characters, dash-delimited as 4 groups having 5 characters each. 
-        /// TODO: Find out why delimiter not working
+        /// 5 random characters, and no delimiter. 
         /// </summary>
         /// <returns></returns>
         [return: SqlFacet(IsFixedLength = false, IsNullable = false, MaxSize = 50)]
         [SqlFunction(IsDeterministic = false, DataAccess = DataAccessKind.None)]
-        private static SqlChars NewDelimitedBase36Id()
-        {
-            return NewBase36IdSpecified(
-                numTimestampCharacters: 11,
-                numServerCharacters: 4,
-                numRandomCharacters: 5,
-                reservedValue: "",
-                delimiter: "-",
-                delimiterPositions: new[] { 15, 10, 5 });
-        }
-
-    /// <summary>
-    /// Returns a new Base 36 Id with 11 timestamp characters, 4 server hash characters,
-    /// 5 random characters, and no delimiter. 
-    /// </summary>
-    /// <returns></returns>
-    [return: SqlFacet(IsFixedLength = false, IsNullable = false, MaxSize = 50)]
-    [SqlFunction(IsDeterministic = false, DataAccess = DataAccessKind.None)]
-    public static SqlChars NewBase36Id()
-        {
-            return NewBase36IdSpecified(
-                numTimestampCharacters: 11, 
-                numServerCharacters: 4, 
-                numRandomCharacters: 5, 
-                reservedValue: "", 
-                delimiter: "-", 
-                delimiterPositions: null);
-        }
-
-        /// <summary>
-        /// Return a new Id with the specified number of characters
-        /// for each component.
-        /// </summary>
-        /// <param name="numTimestampCharacters"></param>
-        /// <param name="numServerCharacters"></param>
-        /// <param name="numRandomCharacters"></param>
-        /// <param name="reservedValue"></param>
-        /// <param name="delimiter"></param>
-        /// <param name="delimiterPositions"></param>
-        /// <returns></returns>
-        /*[return: SqlFacet(IsFixedLength = false, IsNullable = false, MaxSize = 50)]
-        [SqlFunction(IsDeterministic = false, DataAccess = DataAccessKind.None)]*/
-        internal static SqlChars NewBase36IdSpecified(int numTimestampCharacters, int numServerCharacters,
-            int numRandomCharacters, string reservedValue, string delimiter,
-            int[] delimiterPositions)
+        public static SqlChars NewBase36Id()
         {
             // Ensure a generator exists with the specific desired component lengths:
+            var generatorKey = string.Join("-",
+                11.ToString(),
+                4.ToString(),
+                5.ToString(),
+                "" ?? "",
+                "-" ?? "",
+                null);
+            // Cache it:
+            var generator = InitializeGenerator(11, 4, 5, "", "-", null, generatorKey);
+            return new SqlChars(generator.NewId().ToCharArray());
+        }
+
+
+        [return: SqlFacet(IsFixedLength = false, IsNullable = false, MaxSize = 50)]
+        [SqlFunction(IsDeterministic = false, DataAccess = DataAccessKind.None)]
+        public static SqlChars CustomBase36Id(int numTimestampCharacters = 11, int numServerCharacters = 4,
+            int numRandomCharacters = 5, string reservedValue = "", string delimiter = "-",
+            int numDelimiters = 3)
+        {
             var generatorKey = string.Join("-",
                 numTimestampCharacters.ToString(),
                 numServerCharacters.ToString(),
                 numRandomCharacters.ToString(),
                 reservedValue ?? "",
                 delimiter ?? "",
-                delimiterPositions ?? new int[0]);
-            // Cache it:
-            var generator = InitializeGenerator(numTimestampCharacters, numServerCharacters, 
-                numRandomCharacters, reservedValue, delimiter, delimiterPositions, generatorKey);
-            return new SqlChars(generator.NewId().ToCharArray());
+                numDelimiters.ToString());
+
+            var rawIdLength = numTimestampCharacters + numServerCharacters + numRandomCharacters + reservedValue?.Length ?? 0;
+            var segmentLength = rawIdLength/(numDelimiters + 1);
+
+            List<int> positions = new List<int>();
+            int x = rawIdLength;
+            while (x > 0 && positions.Count < numDelimiters)
+            {
+                positions.Add(x = (x - segmentLength));
+            }
+            var generator = InitializeGenerator(numTimestampCharacters, numServerCharacters,
+                numRandomCharacters, reservedValue, delimiter, positions.ToArray(), generatorKey);
+            return new SqlChars(generator.NewId(delimiter?.Length > 0));
         }
 
         internal static Base36IdGenerator InitializeGenerator(int numTimestampCharacters, int numServerCharacters,

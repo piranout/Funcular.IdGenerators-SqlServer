@@ -75,6 +75,7 @@
   <ItemGroup>
     <None Include="Base36SqlClrDb.publish.xml" />
     <None Include="Assemblies\Funcular.IdGenerators.SqlServer.dll" />
+    <None Include="Base36SqlClrDb_1.publish.xml" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\Funcular.IdGenerators.SqlServer\Funcular.IdGenerators.SqlServer.csproj">
