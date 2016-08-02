@@ -7,14 +7,19 @@ namespace Funcular.IdGenerators.Base36
     [CompilerGenerated]
     public static class ConcurrentStopwatch
     {
+        [CompilerGenerated]
         private static readonly DateTime _utcEpoch = new DateTime(1970, 1, 1, 0, 0, 0, DateTimeKind.Utc);
 
+        [CompilerGenerated]
         private static readonly object _lock = new object();
 
+        [CompilerGenerated]
         private static readonly Stopwatch _sw = Stopwatch.StartNew();
 
+        [CompilerGenerated]
         private static readonly long[] _lastMicroseconds = new long[1] {0};
 
+        [CompilerGenerated]
         private static readonly long _timeZeroMicroseconds;
 
         static ConcurrentStopwatch()

@@ -20,14 +20,26 @@ namespace Funcular.IdGenerators.Base36
     {
         #region Private fields
         #region Static
+        [CompilerGenerated]
         private static readonly object _randomLock = new object();
+        [CompilerGenerated]
         private static readonly string[] _hostHash = new string[1];
+        [CompilerGenerated]
         private static readonly Random _random = new Random();
         /// <summary>
         ///     This is UTC Epoch. In shorter Id implementations it was configurable, to allow
         ///     one to milk more longevity out of a shorter series of timestamps.
         /// </summary>
+        [CompilerGenerated]
         private static readonly DateTime _epoch = new DateTime(1970, 1, 1, 0, 0, 0, DateTimeKind.Utc);
+
+        [CompilerGenerated]
+        private static readonly StringBuilder _sb = new StringBuilder();
+        [CompilerGenerated]
+        private static readonly byte[] _randomBuffer = new byte[8];
+        [CompilerGenerated]
+        private static readonly string[] _hashBase36 = new string[1];
+
         #endregion
 
 
@@ -41,9 +53,6 @@ namespace Funcular.IdGenerators.Base36
         private readonly int _numServerCharacters;
         private readonly int _numTimestampCharacters;
         private readonly string _reservedValue;
-        private static readonly StringBuilder _sb = new StringBuilder();
-        private static readonly byte[] _randomBuffer = new byte[8];
-        private static readonly string[] _hashBase36 = new string[1];
 
         #endregion
         #endregion

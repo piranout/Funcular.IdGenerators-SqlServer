@@ -1,16 +1,20 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Runtime.CompilerServices;
 
 namespace Funcular.IdGenerators.BaseConversion
 {
+    [CompilerGenerated]
     internal static class BaseConverter
     {
+        [CompilerGenerated]
         private static readonly string[] _charList = new string[1];
 
         /// <summary>
         ///     The character set for encoding.
         /// </summary>
+        [CompilerGenerated]
         public static string[] CharList { get { return _charList; } }
 
         public static void SetCharList(string characters)

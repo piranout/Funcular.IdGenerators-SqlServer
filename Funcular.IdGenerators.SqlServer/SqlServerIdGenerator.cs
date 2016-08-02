@@ -2,16 +2,19 @@ using System;
 using System.Collections.Generic;
 using System.Data.SqlTypes;
 using System.Linq;
+using System.Runtime.CompilerServices;
 using Funcular.IdGenerators.Base36;
 using Microsoft.SqlServer.Server;
 
-    /// <summary>
-    /// A self-contained packaging of the functionality in the Base36IdGenerator
-    /// from the Funcular.IdGenerators.Base36 namespace in the Funcular.IdGenerators
-    /// NuGet package.
-    /// </summary>
-    public static class SqlServerIdGenerator
+/// <summary>
+/// A self-contained packaging of the functionality in the Base36IdGenerator
+/// from the Funcular.IdGenerators.Base36 namespace in the Funcular.IdGenerators
+/// NuGet package.
+/// </summary>
+[CompilerGenerated]
+public static class SqlServerIdGenerator
     {
+        [CompilerGenerated]
         static readonly Dictionary<string,Base36IdGenerator> _generators = new Dictionary<string,Base36IdGenerator>();
 
 

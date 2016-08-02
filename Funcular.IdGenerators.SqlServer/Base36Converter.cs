@@ -2,14 +2,17 @@ using System;
 using System.Collections.Generic;
 using System.Globalization;
 using System.Linq;
+using System.Runtime.CompilerServices;
 
 namespace Funcular.IdGenerators.BaseConversion
 {
+    [CompilerGenerated]
     internal static class Base36Converter
     {
         private const int BITS_IN_LONG = 64;
         private const int BASE = 36;
         private const string CHAR_LIST = "0123456789ABCDEFGHIJKLMNOPQRSTUVWXYZ";
+        [CompilerGenerated]
         private static readonly char[] _digits = "0123456789ABCDEFGHIJKLMNOPQRSTUVWXYZ".ToCharArray();
 
         static Base36Converter()
