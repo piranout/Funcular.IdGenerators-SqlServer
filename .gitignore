@@ -54,3 +54,6 @@ Temporary Items
 /Funcular.IdGenerators.SqlServer.Tests/bin/Debug
 /Funcular.IdGenerators.SqlServer.Tests/obj/Debug
 /Funcular.IdGenerators-SqlServer/
+/.vs/Funcular.IdGenerators.SqlServer/v16
+/Base36SqlClrDb/Base36SqlClrDb.jfm
+/Base36SqlClrDb/Base36SqlClrDb.dbmdl

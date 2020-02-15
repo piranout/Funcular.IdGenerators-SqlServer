@@ -5,23 +5,21 @@ using Microsoft.VisualStudio.TestTools.UnitTesting;
 namespace Funcular.IdGenerators.SqlServer.Tests
 {
     [TestClass]
-    public class IdGenerationTests
+    public class UnitTests
     {
         private Base36IdGenerator _idGenerator;
-        private string _delimiter;
         private int[] _delimiterPositions;
 
         [TestInitialize]
         public void Setup()
         {
-            this._delimiter = "-";
             this._delimiterPositions = new[] {15, 10, 5};
             this._idGenerator = new Base36IdGenerator(
                 numTimestampCharacters: 11,
-                numServerCharacters: 5,
-                numRandomCharacters: 4,
-                reservedValue: "",
-                delimiter: this._delimiter,
+                numServerCharacters: 4,
+                numRandomCharacters: 5,
+                reservedValue: null,
+                delimiter: "-",
                 // give the positions in reverse order if you
                 // don't want to have to account for modifying
                 // the loop internally. To do the same in ascending
@@ -47,7 +45,8 @@ namespace Funcular.IdGenerators.SqlServer.Tests
         [TestMethod]
         public void Index_Is_Not_outside_bounds()
         {
-            Assert.IsTrue(SqlServerIdGenerator.NewBase36Id()?.Length > 10);
+            var newBase36Id = SqlServerIdGenerator.NewBase36Id();
+            Assert.IsTrue(newBase36Id?.Length == 20);
         }
     }
 }

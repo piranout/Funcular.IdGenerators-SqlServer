@@ -9,8 +9,9 @@
     <AppDesignerFolder>Properties</AppDesignerFolder>
     <RootNamespace>Funcular.IdGenerators.SqlServer</RootNamespace>
     <AssemblyName>Funcular.IdGenerators.SqlServer</AssemblyName>
-    <TargetFrameworkVersion>v4.6.1</TargetFrameworkVersion>
+    <TargetFrameworkVersion>v4.7.2</TargetFrameworkVersion>
     <FileAlignment>512</FileAlignment>
+    <TargetFrameworkProfile />
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
     <DebugSymbols>true</DebugSymbols>
@@ -28,6 +29,12 @@
     <DefineConstants>TRACE</DefineConstants>
     <ErrorReport>prompt</ErrorReport>
     <WarningLevel>4</WarningLevel>
+  </PropertyGroup>
+  <PropertyGroup>
+    <SignAssembly>true</SignAssembly>
+  </PropertyGroup>
+  <PropertyGroup>
+    <AssemblyOriginatorKeyFile>Funcular.IdGenerators.SqlServer.snk</AssemblyOriginatorKeyFile>
   </PropertyGroup>
   <ItemGroup>
     <Reference Include="System" />
@@ -49,7 +56,20 @@
     <Compile Include="SqlServerIdGenerator.cs" />
     <Compile Include="TimestampResolution.cs" />
   </ItemGroup>
+  <ItemGroup>
+    <None Include="Funcular.IdGenerators.SqlServer.snk" />
+  </ItemGroup>
+  <ItemGroup>
+    <Content Include="InstallationScript.sql" />
+  </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
+  <PropertyGroup>
+    <PostBuildEvent>COPY $(ProjectDir)Funcular.IdGenerators.SqlServer.snk C:\temp\ 
+
+COPY $(ProjectDir)$(OutDir)Funcular.IdGenerators.SqlServer.dll C:\temp\
+
+COPY $(ProjectDir)$(OutDir)Funcular.IdGenerators.SqlServer.dll ..\..\..\Base36SqlClrDb\Assemblies\</PostBuildEvent>
+  </PropertyGroup>
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
        Other similar extension points exist, see Microsoft.Common.targets.
   <Target Name="BeforeBuild">

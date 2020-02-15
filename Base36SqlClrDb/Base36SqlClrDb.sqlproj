@@ -17,7 +17,7 @@
     <ModelCollation>1033, CI</ModelCollation>
     <DefaultFileStructure>BySchemaAndSchemaType</DefaultFileStructure>
     <DeployToDatabase>True</DeployToDatabase>
-    <TargetFrameworkVersion>v4.6.1</TargetFrameworkVersion>
+    <TargetFrameworkVersion>v4.7.2</TargetFrameworkVersion>
     <TargetLanguage>CS</TargetLanguage>
     <AppDesignerFolder>Properties</AppDesignerFolder>
     <SqlServerVerification>False</SqlServerVerification>
@@ -26,6 +26,7 @@
     <Trustworthy>True</Trustworthy>
     <PermissionSet>UNSAFE</PermissionSet>
     <AssemblyOwner>dbo</AssemblyOwner>
+    <TargetFrameworkProfile />
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
     <OutputPath>bin\Release\</OutputPath>
@@ -66,6 +67,11 @@
   </ItemGroup>
   <ItemGroup>
     <Build Include="TestTable.sql" />
+    <Build Include="dbo\Functions\NewBase36Id.sql" />
+    <Build Include="MasterKey.sql" />
+    <Build Include="AsymmetricKey.sql" />
+    <Build Include="Funcular-IdGenerators-SqlServer-StrongNameKeyLogin.sql" />
+    <Build Include="GrantUnsafeAssembly.sql" />
   </ItemGroup>
   <ItemGroup>
     <Reference Include="System" />
@@ -74,8 +80,8 @@
   </ItemGroup>
   <ItemGroup>
     <None Include="Base36SqlClrDb.publish.xml" />
-    <None Include="Assemblies\Funcular.IdGenerators.SqlServer.dll" />
     <None Include="Base36SqlClrDb_1.publish.xml" />
+    <None Include="Assemblies\Funcular.IdGenerators.SqlServer.dll" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\Funcular.IdGenerators.SqlServer\Funcular.IdGenerators.SqlServer.csproj">

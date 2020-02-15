@@ -78,7 +78,7 @@ namespace Funcular.IdGenerators.Base36
         ///     and no reserved character. The default delimited format will be four dash-separated
         ///     groups of 5.
         public Base36IdGenerator()
-            : this(11, 4, 5, "", "-")
+            : this(11, 4, 5, null, "-")
         {
             this._delimiterPositions = new[] { 15, 10, 5 };
         }
@@ -96,7 +96,7 @@ namespace Funcular.IdGenerators.Base36
             this._numRandomCharacters = numRandomCharacters;
             this._reservedValue = reservedValue;
             this._delimiter = delimiter;
-            this._delimiterPositions = delimiterPositions;
+            this._delimiterPositions = delimiterPositions?.OrderByDescending(x=>x).ToArray();
 
             this._maxRandom = (long)Math.Pow(36d, numRandomCharacters);
             _hostHash[0] = ComputeHostHash();
@@ -129,7 +129,7 @@ namespace Funcular.IdGenerators.Base36
         /// <summary>
         ///     Generates a unique, sequential, Base36 string; you control the len
         ///     The first 10 characters are the microseconds elapsed since the InService DateTime
-        ///     (constant field you hardcode in this file).
+        ///     (constant field you hard-code in this file).
         ///     The next 2 characters are a compressed checksum of the MD5 of this host.
         ///     The next 1 character is a reserved constant of 36 ('Z' in Base36).
         ///     The last 3 characters are random number less than 46655 additional for additional uniqueness.
@@ -149,7 +149,9 @@ namespace Funcular.IdGenerators.Base36
                 string base36Microseconds = Base36Converter.FromLong(microseconds);
                 if (base36Microseconds.Length > this._numTimestampCharacters)
                     base36Microseconds = base36Microseconds.Substring(0, this._numTimestampCharacters);
-                _sb.Append(base36Microseconds.PadLeft(this._numTimestampCharacters, '0'));
+                else if (base36Microseconds.Length < this._numTimestampCharacters)
+                    base36Microseconds = base36Microseconds.PadLeft(this._numTimestampCharacters, '0');
+                _sb.Append(base36Microseconds);
 
                 _sb.Append(_hostHash[0]);
 
@@ -208,9 +210,11 @@ namespace Funcular.IdGenerators.Base36
                     hashHex = hashHex.Substring(0, 14);
             }
             string hashBase36 = Base36Converter.FromHex(hashHex);
+            if (hashBase36.Length > this._numServerCharacters)
+                hashBase36 = hashBase36.Substring(0, this._numServerCharacters);
+            else if (hashBase36.Length < this._numServerCharacters)
+                hashBase36 = hashBase36.PadLeft(_numServerCharacters, '0');
             _hashBase36[0] = hashBase36;
-            if (_hashBase36[0].Length > this._numServerCharacters)
-                _hashBase36[0] = _hashBase36[0].Substring(0, this._numServerCharacters);
             return _hashBase36[0];
         }
 
@@ -289,7 +293,7 @@ namespace Funcular.IdGenerators.Base36
                 {
                     throw new OverflowException(string.Format("At resolution {0}, value is greater than {1}-character timestamps can express.", resolution.ToString(), length));
                 }
-                intervals = intervals % 36;
+                intervals %= 36;
             }
             string encoded = Base36Converter.FromLong(intervals);
             return encoded.Length > length ?

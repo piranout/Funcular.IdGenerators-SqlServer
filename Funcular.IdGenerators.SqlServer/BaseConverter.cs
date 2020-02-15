@@ -104,7 +104,7 @@ namespace Funcular.IdGenerators.BaseConversion
             {
                 int remainder = (int)(currentNumber % radix);
                 charArray[index--] = DIGITS[remainder];
-                currentNumber = currentNumber / radix;
+                currentNumber /= radix;
             }
 
             string result = new String(charArray, index + 1, BITS_IN_LONG - index - 1);

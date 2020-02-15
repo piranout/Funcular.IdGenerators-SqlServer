@@ -1,0 +1,1 @@
+﻿GRANT UNSAFE ASSEMBLY TO [Funcular-IdGenerators-SqlServer-StrongNameKeyLogin] 
