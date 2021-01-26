@@ -52,6 +52,7 @@
     <Compile Include="BaseConverter.cs" />
     <Compile Include="Base36IdGenerator.cs" />
     <Compile Include="ConcurrentStopwatch.cs" />
+    <Compile Include="IdInformation.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="SqlServerIdGenerator.cs" />
     <Compile Include="TimestampResolution.cs" />

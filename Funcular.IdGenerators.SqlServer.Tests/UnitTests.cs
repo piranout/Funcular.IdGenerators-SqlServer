@@ -36,7 +36,7 @@ namespace Funcular.IdGenerators.SqlServer.Tests
 
 
             Assert.IsTrue(info.TimestampComponent.Length == base36IdGenerator.NumTimestampCharacters);
-            Assert.IsTrue(info.CreationTimestamp?.Date == creationTimestamp.Date && info.CreationTimestamp?.Hour == creationTimestamp.Hour);
+            Assert.IsTrue(info.CreationTimestampUtc?.Date == creationTimestamp.Date && info.CreationTimestampUtc?.Hour == creationTimestamp.Hour);
 
             var length = id.Length;
             var formatted = base36IdGenerator.Format(id);
@@ -56,7 +56,7 @@ namespace Funcular.IdGenerators.SqlServer.Tests
 
 
             Assert.IsTrue(info.TimestampComponent.Length == base36IdGenerator.NumTimestampCharacters);
-            Assert.IsTrue(info.CreationTimestamp?.Date == creationTimestamp.Date && info.CreationTimestamp.Value.Hour == creationTimestamp.Hour);
+            Assert.IsTrue(info.CreationTimestampUtc?.Date == creationTimestamp.Date && info.CreationTimestampUtc.Value.Hour == creationTimestamp.Hour);
 
             var length = id.Length;
             var formatted = base36IdGenerator.Format(id);

@@ -472,26 +472,10 @@ namespace Funcular.IdGenerators.Base36
                     break;
             }
 
-            info.CreationTimestamp = result;
+            info.CreationTimestampUtc = result;
 
             return info;
         }
 
     }
-
-    public class IdInformation
-    {
-        public static IdInformation Default = new IdInformation();
-        public int Base { get; set; }
-        public string TimestampComponent { get; set; }
-        public string HashComponent { get; set; }
-        public string RandomComponent { get; set; }
-        public DateTime? CreationTimestamp { get; set; }
-    }
 }
-
-namespace Funcular.IdGenerators.BaseConversion
-{
-}
-
-// ReSharper restore RedundantCaseLabel
