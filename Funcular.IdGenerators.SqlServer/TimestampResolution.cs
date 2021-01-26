@@ -1,4 +1,4 @@
-namespace Funcular.IdGenerators.Enums
+namespace Funcular.IdGenerators.SqlServer
 {
     public enum TimestampResolution
     {

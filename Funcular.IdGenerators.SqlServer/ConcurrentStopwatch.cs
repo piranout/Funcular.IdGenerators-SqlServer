@@ -48,5 +48,18 @@ namespace Funcular.IdGenerators.Base36
             }
 
         }
+
+        /// <summary>
+        /// Returns the time in microseconds since <paramref name="since"/>
+        /// </summary>
+        /// <param name="since"></param>
+        /// <returns></returns>
+        public static long GetMicroseconds(DateTimeOffset since)
+        {
+            lock (_lock)
+            {
+                return since.Subtract(_utcEpoch).Ticks / 10;
+            }
+        }
     }
 }

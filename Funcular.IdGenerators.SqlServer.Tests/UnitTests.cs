@@ -7,46 +7,83 @@ namespace Funcular.IdGenerators.SqlServer.Tests
     [TestClass]
     public class UnitTests
     {
-        private Base36IdGenerator _idGenerator;
+        private string _delimiter; 
         private int[] _delimiterPositions;
 
         [TestInitialize]
         public void Setup()
         {
+            this._delimiter = "-";
             this._delimiterPositions = new[] {15, 10, 5};
-            this._idGenerator = new Base36IdGenerator(
-                numTimestampCharacters: 11,
-                numServerCharacters: 4,
-                numRandomCharacters: 5,
-                reservedValue: null,
-                delimiter: "-",
-                // give the positions in reverse order if you
-                // don't want to have to account for modifying
-                // the loop internally. To do the same in ascending
-                // order, you would need to pass 5, 11, 17:
-                delimiterPositions: this._delimiterPositions);
-            // delimiterPositions: new[] {5, 11, 17});
         }
 
         [TestMethod]
         public void Initialize()
         {
-            _idGenerator.NewId();
+            Console.WriteLine(SqlServerIdGenerator.NewBase36Id().ToSqlString().Value);
+            Console.WriteLine(SqlServerIdGenerator.NewBase36Id16FromTimestamp(new DateTime(2020,1,1)).ToSqlString().Value);
         }
+
+
+        [TestMethod]
+        public void Id_With_20_Chars_Parses_Correctly()
+        {
+            var creationTimestamp = DateTime.UtcNow;
+            var id = SqlServerIdGenerator.NewBase36IdFromTimestamp(creationTimestamp).ToSqlString().Value; // _idGenerator.NewId();
+
+            var base36IdGenerator = new Base36IdGenerator();
+            var info = base36IdGenerator.Parse(id);
+
+
+            Assert.IsTrue(info.TimestampComponent.Length == base36IdGenerator.NumTimestampCharacters);
+            Assert.IsTrue(info.CreationTimestamp?.Date == creationTimestamp.Date && info.CreationTimestamp?.Hour == creationTimestamp.Hour);
+
+            var length = id.Length;
+            var formatted = base36IdGenerator.Format(id);
+            Assert.IsTrue(formatted.Contains(_delimiter) && formatted.Length == length + (_delimiter.Length * _delimiterPositions.Length));
+        }
+
+
+        [TestMethod]
+        public void Id_With_16_Chars_And_Creation_Timestamp_Parses_Correctly()
+        {
+            var creationTimestamp = DateTime.SpecifyKind(new DateTime(2020,1,1), DateTimeKind.Utc);
+            
+            var id = SqlServerIdGenerator.NewBase36Id16FromTimestamp(creationTimestamp).ToSqlString().Value;
+
+            var base36IdGenerator = new Base36IdGenerator(11,2,3, delimiterPositions: new int[]{12,8,4});
+            var info = base36IdGenerator.Parse(id);
+
+
+            Assert.IsTrue(info.TimestampComponent.Length == base36IdGenerator.NumTimestampCharacters);
+            Assert.IsTrue(info.CreationTimestamp?.Date == creationTimestamp.Date && info.CreationTimestamp.Value.Hour == creationTimestamp.Hour);
+
+            var length = id.Length;
+            var formatted = base36IdGenerator.Format(id);
+            Assert.IsTrue(formatted.Contains(_delimiter) && formatted.Length == length + (_delimiter.Length * _delimiterPositions.Length));
+        }
+
 
         [TestMethod]
         public void Ids_Are_Ascending()
         {
-            string id1 = this._idGenerator.NewId();
-            string id2 = this._idGenerator.NewId();
+            string id1 = SqlServerIdGenerator.NewBase36Id().ToSqlString().Value;
+            string id2 = SqlServerIdGenerator.NewBase36Id().ToSqlString().Value;
+            Assert.IsTrue(String.Compare(id2, id1, StringComparison.OrdinalIgnoreCase) > 0);
+
+            id1 = SqlServerIdGenerator.NewBase36Id16().ToSqlString().Value;
+            id2 = SqlServerIdGenerator.NewBase36Id16().ToSqlString().Value;
             Assert.IsTrue(String.Compare(id2, id1, StringComparison.OrdinalIgnoreCase) > 0);
         }
 
         [TestMethod]
-        public void Index_Is_Not_outside_bounds()
+        public void LengthsAreCorrect()
         {
-            var newBase36Id = SqlServerIdGenerator.NewBase36Id();
+            var newBase36Id = SqlServerIdGenerator.NewBase36Id().ToSqlString().Value;
             Assert.IsTrue(newBase36Id?.Length == 20);
+
+            newBase36Id = SqlServerIdGenerator.NewBase36Id16().ToSqlString().Value;
+            Assert.IsTrue(newBase36Id?.Length == 16);
         }
     }
 }

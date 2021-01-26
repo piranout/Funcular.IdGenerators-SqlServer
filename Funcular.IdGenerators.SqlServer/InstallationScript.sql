@@ -65,3 +65,22 @@ RETURNS NVARCHAR (20)
 AS
  EXTERNAL NAME [Funcular.IdGenerators.SqlServer].[SqlServerIdGenerator].[NewBase36Id]
 GO
+
+CREATE FUNCTION [dbo].[NewBase36IdFromTimestamp](@creationTimestamp AS datetime)
+RETURNS NVARCHAR (20)
+AS
+ EXTERNAL NAME [Funcular.IdGenerators.SqlServer].[SqlServerIdGenerator].[NewBase36IdFromTimestamp]
+GO
+
+
+CREATE FUNCTION [dbo].[NewBase36Id16]()
+RETURNS NVARCHAR (16)
+AS
+ EXTERNAL NAME [Funcular.IdGenerators.SqlServer].[SqlServerIdGenerator].[NewBase36Id16]
+GO
+
+CREATE FUNCTION [dbo].[NewBase36Id16FromTimestamp](@creationTimestamp AS datetime)
+RETURNS NVARCHAR (16)
+AS
+ EXTERNAL NAME [Funcular.IdGenerators.SqlServer].[SqlServerIdGenerator].[NewBase36Id16FromTimestamp]
+GO
